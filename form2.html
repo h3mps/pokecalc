@@ -1,0 +1,1097 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>Pokemon Team Calculator</title>
+    <link rel="icon" href="./favicon.png">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+    <style>
+        /* Background */
+        body {
+            background-image: url("./background5.jpg");
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Containers */
+
+        .tablecontainer {
+            margin-left: 80px;
+            margin-right: 80px;
+            padding: 20px;
+        }
+
+        .titlewrapper {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 750px;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            padding: 10px;
+            background-color: #f2f2f2;
+            border: 2px solid black;
+            border-radius: 10px;
+        }
+
+            .title h1 {
+                font-family: "Copperplate Gothic";
+                text-align: center;
+            }
+
+        .teamname {
+            padding: 2px;
+            margin: 2px;
+            display: block;
+        }
+
+            .teamname h3 {
+                text-align: center;
+                margin: 2px;
+            }
+
+        .formwrapper, .calcresults {
+            width: 100%;
+        }
+
+        .inputtablediv, .calcresults {
+            overflow-x: auto;
+            overflow-y: visible;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px solid black;
+            border-radius: 10px;
+            width: 95%;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+
+            .calcresults:empty {
+                display: none;
+            }
+
+        .inputfieldwrapperoutside {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 750px;
+        }
+
+        .inputfieldwrapperinside {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #f2f2f2;
+            margin: 10px;
+            border: 2px solid black;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .inputfielddiv {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 95%;
+            padding: 10px;
+        }
+
+        .fieldselectdiv {
+            margin: 2px 20px 2px 20px;
+            padding: 10px;
+            width: 150px;
+            background-color: #f2f2f2;
+            border-radius: 10px;
+        }
+
+            .fieldselectdiv label {
+                font-weight: bold;
+            }
+
+            .fieldselectdiv select {
+                display: block;
+                width: 90%;
+                margin: 5px;
+                padding: 3px;
+                border-radius: 5px;
+                font-size: 14px;
+                box-shadow: -1px -1px 2px inset;
+            }
+
+                .fieldselectdiv select:hover {
+                    box-shadow: 2px 2px 4px;
+                    cursor: pointer;
+                    background-color: #f0f0f0;
+                }
+
+        /* Tables */
+        /* Common Table Attributes */
+
+        table {
+            table-layout: fixed;
+            border-spacing: 10px;
+            border-collapse: separate;
+            font-size: 14px;
+        }
+
+            table tr {
+                padding: 10px;
+            }
+
+            table th {
+                font-size: 16px;
+                text-decoration: underline;
+            }
+
+        .pokecalc td, .calcresulttable td {
+            width: 250px;
+            min-width: 250px;
+        }
+
+        .calcresulttableone {
+            width: 95%;
+        }
+
+            .calcresulttableone td {
+                width: 180px;
+                min-width: 180px;
+            }
+
+        /* Input Table Only */
+        .pokecalc td {
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            background-color: #e6f2ff;
+            box-shadow: 1px 1px 2px;
+        }
+
+        .calcresulttable td {
+            padding: 3px;
+            border-radius: 10px;
+        }
+
+        /* Input Table Inputs */
+        .inputtablediv label {
+            float: left;
+            width: 30%;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        /* Input Areas (dropdown, info, evs, moves) */
+        /* dropdown */
+        .setinput {
+            width: 90%;
+            padding: 6px;
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: -1px -1px 2px inset;
+        }
+
+            .setinput:hover {
+                box-shadow: 2px 2px 4px;
+                cursor: pointer;
+                background-color: #f0f0f0;
+            }
+
+        /* info */
+        .info input[type=text], .moves input[type=text] {
+            padding: 2px 2px;
+            margin: 1px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: 65%;
+        }
+
+        /* evs */
+        .evs input[type=text] {
+            width: 25%;
+            padding: 2px 2px;
+            margin: 1px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .evs select {
+            width: 20%;
+            margin-left: 5px;
+        }
+
+        /* input[type=select] */
+        input[type=select] {
+            width: 100%;
+        }
+
+        /* input[type=submit] */
+        .calcsubmitwrapperouter {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 700px;
+        }
+
+        .calcsubmitwrapperinner {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #f2f2f2;
+            margin: 10px;
+            border: 2px solid black;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .calcsubmit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            width: 95%;
+        }
+
+            .calcsubmit button, .analysisbutton {
+                background-color: #4CAF50;
+                color: white;
+                padding: 8px 8px;
+                border: none;
+                border-radius: 8px;
+                margin: 8px 8px;
+                cursor: pointer;
+                font-size: 16px;
+                font-family: "Verdana";
+                width: 200px;
+            }
+
+                .calcsubmit button:hover, .analysisbutton:hover {
+                    background-color: #45a049;
+                }
+
+        /* Inner Div Elements */
+        .calcone {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 95%;
+            text-align: center;
+        }
+
+        .calcleft {
+            float: left;
+            width: 49%;
+            text-align: center;
+        }
+
+        .calcright {
+            float: right;
+            width: 49%;
+            text-align: center;
+        }
+
+        .calcname {
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .movebox {
+            display: block;
+            background-color: azure;
+            border-radius: 20px;
+            border: 2px solid black;
+            margin: 1px 1px 1px 1px;
+            padding: 5px 2px 2px 2px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+            .movebox:empty {
+                display: none;
+            }
+
+        .moves {
+            display: block;
+            padding: 1px;
+        }
+
+        .outputtoprowh2 {
+            float: left;
+        }
+
+        .outputtoprowbut {
+            float: right;
+            text-align: right;
+        }
+
+        .legend {
+            list-style: none;
+            width: 600px;
+        }
+
+            .legend li {
+                float: right;
+                margin-right: 10px;
+            }
+
+            .legend span {
+                border: 1px solid #ccc;
+                float: left;
+                width: 12px;
+                height: 12px;
+                margin: 2px;
+            }
+            /* your colors */
+            .legend .span0 {
+                background-color: #d13636;
+            }
+
+            .legend .span1 {
+                background-color: #ed8181;
+            }
+
+            .legend .span2 {
+                background-color: #f2f2f2;
+            }
+
+            .legend .span3 {
+                background-color: #90e97f;
+            }
+
+            .legend .span4 {
+                background-color: #45a049;
+            }
+    </style>
+
+</head>
+<body>
+    <div class="tablecontainer">
+        <div class="titlewrapper">
+            <div class="title">
+                <h1> Team Pokemon Calculator </h1>
+            </div>
+        </div>
+        <div class="formwrapper">
+            <form method="POST" action="/">
+                <div class="inputtablediv" id="inputtabledivL"></div>
+                <div class="inputfieldwrapperoutside">
+                    <div class="inputfieldwrapperinside">
+                        <div class="teamname">
+                            <h3> Field </h3>
+                        </div>
+                        <div class="inputfielddiv"></div>
+                    </div>
+                </div>
+                <div class="inputtablediv" id="inputtabledivR"></div>
+                <div class="calcsubmitwrapperouter">
+                    <div class="calcsubmitwrapperinner">
+                        <div class="calcsubmit">
+                            <button type="submit" value="offense">Team 1: Offense</button>
+                            <button type="submit" value="defense">Team 1: Defense</button>
+                            <button type="submit" value="all">Calculate Both</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="calcresults"></div>
+    </div>
+
+    
+    <script>
+        // Create Template and Fill Template
+        let inputRowValues = ["L", "R"];
+        let inputBoxDivs = ["info", "evs", "moves"];
+        let inputBoxLabels = [["Name", "Nature", "Ability", "Item", "Status"], ["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"], ["Move 1", "Move 2", "Move 3", "Move 4"]];
+        let inputBoxNames = [["name", "nature", "ability", "item", "status"], ["hp", "atk", "def", "spa", "spd", "spe"], ["move1", "move2", "move3", "move4"]];
+        let inputStatus = {
+            'Healthy': '',
+            'Paralyzed': 'par',
+            'Poisoned': 'psn',
+            'Badly Poisoned': 'tox',
+            'Burned': 'brn',
+            'Asleep': 'slp',
+            'Frozen': 'frz'
+        }
+
+        let inputFieldGroups = ["Team 1 Side", "Terrain", "Weather", "Team 2 Side"];
+        let inputFieldValues = [["Light Screen", "Reflect", "Aurora Veil"], ["Grassy", "Electric", "Psychic", "Misty"], ["Sun", "Rain", "Sand", "Hail"], ["Light Screen", "Reflect", "Aurora Veil"]];
+
+        $(document).ready(function () {
+            // set up JSON url
+            let url = 'http://localhost:3000/sets';
+
+            inputRowValues.forEach(function (r, rind) {
+                // create table of pokemon inputs
+                var teamnum = rind + 1
+                const inputDiv = document.querySelector("#inputtablediv" + r);
+
+                inputDiv.innerHTML = '';
+
+                let inputTeamNameDiv = document.createElement('div');
+                inputTeamNameDiv.className = 'teamname';
+
+                let inputTeamName = document.createElement('h3');
+                inputTeamName.innerHTML = 'Team ' + teamnum;
+                inputTeamNameDiv.append(inputTeamName);
+                inputDiv.append(inputTeamNameDiv);
+
+                let inputTable = document.createElement('table');
+                inputTable.className = 'pokecalc';
+
+                let inputTableHeadRow = document.createElement('tr');
+
+                for (c = 1; c < 7; c++) {
+                    let inputTableHeadCell = document.createElement('th');
+                    inputTableHeadCell.className = 'pokecalchead';
+                    inputTableHeadCell.innerHTML = 'Pokemon ' + c;
+                    inputTableHeadRow.append(inputTableHeadCell);
+
+                }
+                inputTable.append(inputTableHeadRow);
+
+                let inputTableRow = document.createElement('tr');
+                for (c = 1; c < 7; c++) {
+                    let inputTableCell = document.createElement('td');
+                    inputTableCell.id = r + 'cell' + c;
+
+                    let inputTableInputDiv = document.createElement('div');
+                    inputTableInputDiv.className = "dropdown";
+
+                    let inputTableInputList = document.createElement('input');
+                    inputTableInputList.setAttribute("list", r + "list" + c);
+                    inputTableInputList.setAttribute("class", "setinput");
+                    inputTableInputList.setAttribute("name", r + "sl" + c);
+                    inputTableInputList.setAttribute("id", r + "sl" + c);
+                    inputTableInputList.setAttribute("onfocus", "this.value=''");
+                    inputTableInputList.setAttribute("placeholder", "Choose Set");
+                    inputTableInputDiv.append(inputTableInputList);
+
+                    let inputTableInputDatalist = document.createElement('datalist');
+                    inputTableInputDatalist.setAttribute("id", r + "list" + c);
+                    inputTableInputDatalist.setAttribute("class", "setinputlist");
+                    inputTableInputDiv.append(inputTableInputDatalist);
+
+                    inputTableCell.append(inputTableInputDiv)
+                    inputTableCell.append(document.createElement('br'));
+
+                    for (d = 0; d < 3; d++) {
+                        let inputTableInputDiv = document.createElement('div');
+                        inputTableInputDiv.className = inputBoxDivs[d];
+
+                        var inputBoxLength = inputBoxNames[d].length;
+                        for (i = 0; i < inputBoxLength; i++) {
+                            createInputField(r, c, inputBoxNames[d][i], inputBoxLabels[d][i], inputTableInputDiv, d);
+                        };
+
+                        inputTableCell.append(inputTableInputDiv)
+                        inputTableCell.append(document.createElement('br'));
+                    };
+
+                    inputTableRow.append(inputTableCell);
+
+                };
+                inputTable.append(inputTableRow);
+                inputDiv.append(inputTable);
+
+            });
+
+            function createInputField(r, c, name, label, cell, d) {
+                let inputTableLabel = document.createElement('LABEL');
+                inputTableLabel.setAttribute("for", r + name + c);
+                inputTableLabel.setAttribute("class", "inputTableLabel");
+                inputTableLabel.innerText = label + ": ";
+                cell.append(inputTableLabel);
+
+                if (d == 0 && label == "Status") {
+                    let inputTableDropdown = document.createElement('select');
+                    inputTableDropdown.setAttribute("name", r + name + c);
+                    inputTableDropdown.setAttribute("id", r + name + c);
+                    $.each(inputStatus, function (text, val) {
+                        let inputTableDropdownOption = document.createElement('option');
+                        inputTableDropdownOption.text = text;
+                        inputTableDropdownOption.value = val;
+                        if (text == "Healthy") {
+                            inputTableDropdownOption.selected = true;
+                        }
+                        else {
+                            inputTableDropdownOption.selected = false;
+                        }
+                        inputTableDropdown.appendChild(inputTableDropdownOption)
+                    });
+
+                    cell.append(inputTableDropdown);
+                }
+
+                else {
+                    let inputTableInput = document.createElement('input');
+                    inputTableInput.setAttribute("type", "text");
+                    inputTableInput.setAttribute("name", r + name + c);
+                    inputTableInput.setAttribute("id", r + name + c);
+                    cell.append(inputTableInput);
+
+                    if (d == 1) {
+                        let inputTableDropdown = document.createElement('select');
+                        inputTableDropdown.setAttribute("name", r + name + c + "sel");
+                        inputTableDropdown.setAttribute("id", r + name + c + "sel");
+
+                        for (p = 6; p > -7; p--) {
+                            if (p > 0) {
+                                var np = '+' + p;
+                            }
+                            else {
+                                var np = p;
+                            }
+                            let inputTableDropdownOption = document.createElement('option');
+                            if (p == 0) {
+                                inputTableDropdownOption.text = "--";
+                                inputTableDropdownOption.value = p;
+                                inputTableDropdownOption.selected = true;
+                            }
+                            else {
+                                inputTableDropdownOption.text = np;
+                                inputTableDropdownOption.value = p;
+                                inputTableDropdownOption.selected = false;
+                            }
+                            inputTableDropdown.appendChild(inputTableDropdownOption)
+
+                        }
+
+                        cell.append(inputTableDropdown)
+
+                    }
+                }
+
+                cell.append(document.createElement('br'));
+            };
+
+            // populate dropdown of pokemon
+            $.getJSON(url, function (data) {
+                $('.setinputlist').each(function () {
+                    var thisEntry = this
+                    $.each(data, function (tier, entry) {
+                        $.each(entry, function (e, mon) {
+                            $.each(mon, function (subset, val) {
+                                $.each(val, function (sub, n) {
+                                    var tierup = tier.toUpperCase();
+                                    var subc = sub.replace(/ /g, "__");
+                                    var option = $("<option value='" + subset + " (" + tierup + " " + sub + ")" + "'  data-value='" + tier + "--" + e + "--" + subset + "--" + subc + "'></option>");
+                                    $(thisEntry).append(option);
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+
+            // Create Field Entrys
+            const inputFieldDiv = document.querySelector(".inputfielddiv");
+
+            inputFieldGroups.forEach(function (g, i) {
+                var groupname = inputFieldGroups[i];
+                var groupnamelowerspace = groupname.toLowerCase();
+                var groupnamelower = groupnamelowerspace.replace(/\s/g, '');
+
+                let inputFieldGroupDiv = document.createElement('div');
+                inputFieldGroupDiv.className = 'fieldselectdiv';
+
+                let inputFieldLabel = document.createElement('LABEL');
+                inputFieldLabel.setAttribute("for", "field" + groupnamelower);
+                inputFieldLabel.setAttribute("class", "inputTableLabel");
+                inputFieldLabel.innerText = g + ": ";
+                inputFieldGroupDiv.append(inputFieldLabel);
+
+                let inputFieldGroupSelect = document.createElement('select');
+                inputFieldGroupSelect.setAttribute("name", "field" + groupnamelower);
+                inputFieldGroupSelect.setAttribute("id", "field" + groupnamelower);
+
+                let inputFieldOptionNone = document.createElement('option');
+                inputFieldOptionNone.text = 'None';
+                inputFieldOptionNone.value = "None";
+                inputFieldOptionNone.selected = true;
+                inputFieldGroupSelect.append(inputFieldOptionNone);
+
+                inputFieldValues[i].forEach(function (v, j) {
+                    let inputFieldOption = document.createElement('option');
+                    inputFieldOption.value = v;
+                    inputFieldOption.text = v;
+                    inputFieldOption.selected = false;
+                    inputFieldGroupSelect.append(inputFieldOption);
+
+                })
+
+                inputFieldGroupDiv.append(inputFieldGroupSelect)
+
+                inputFieldDiv.append(inputFieldGroupDiv)
+            })
+
+        });
+
+    </script>
+
+    <script>
+        // On click of an input
+        $('.inputtablediv').on('input', '.setinput', function (event) {
+            var targid = event.target.id;
+            var r = targid.charAt(0);
+            var num = targid.replace(/[^0-9]/g, '');
+
+            // Recover JSON values
+            var ci = $('#' + targid).val();
+            var cinput = $('#' + r + "list" + num).find("option[value ='" + ci + "']").data("value");
+            if (cinput !== undefined) {
+                var monvals = cinput.split("--");
+
+                var subc = monvals[3].replace(/__/g, " ");
+                var chosene = monvals[1];
+                var chosentier = monvals[0]
+                var chosenmon = monvals[2]
+                var chosensub = subc
+
+                console.log(chosenmon + ' (' + chosentier.toUpperCase() + ' ' + chosensub + ')')
+
+                document.querySelector("[id=" + r + "name" + num + "]").value = chosenmon;
+
+                $.getJSON('http://localhost:3000/sets', function (data) {
+                    for (d = 0; d < 3; d++) {
+                        var inputBoxLength = inputBoxNames[d].length;
+                        for (i = 0; i < inputBoxLength; i++) {
+                            var ref1 = inputBoxDivs[d];
+                            var ref2 = inputBoxNames[d][i];
+                            if (d == 0) {
+                                if (ref2 in data[chosentier][chosene][chosenmon][chosensub]) {
+                                    document.querySelector("[id=" + r + ref2 + num + "]").value = data[chosentier][chosene][chosenmon][chosensub][ref2];
+                                }
+                            }
+                            else if (d == 1) {
+                                if (ref2 in data[chosentier][chosene][chosenmon][chosensub][ref1]) {
+                                    document.querySelector("[id=" + r + ref2 + num + "]").value = data[chosentier][chosene][chosenmon][chosensub][ref1][ref2];
+                                }
+                                else {
+                                    document.querySelector("[id=" + r + ref2 + num + "]").value = 0;
+                                }
+                            }
+                            else if (d == 2) {
+                                document.querySelector("[id=" + r + ref2 + num + "]").value = data[chosentier][chosene][chosenmon][chosensub][ref1][i];
+                            };
+                        }
+
+                    }
+
+                });
+                
+            }
+            
+        });
+
+
+
+    </script>
+
+
+    <script>
+        var chosenButton = '';
+        var damagelog = {};
+        // On submit
+        $('form').on('submit', makeRequest);
+        function makeRequest(e) {
+            e.preventDefault();
+            chosenButton = $(document.activeElement).val();
+            var chosenButtonCap = chosenButton.toUpperCase()
+
+            // Create table template
+            const outputDiv = document.querySelector("div.calcresults");
+
+            outputDiv.innerHTML = '';
+
+            let outputTableTopRow = document.createElement('div');
+            outputTableTopRow.className = 'outputtoprow';
+
+            let outputTableTopRowH2 = document.createElement('div');
+            outputTableTopRowH2.className = 'outputtoprowh2';
+            
+            let outputTableTitle = document.createElement('h2');
+            outputTableTitle.innerHTML = "Matchup Results (Team 1): " + chosenButtonCap;
+            outputTableTopRowH2.append(outputTableTitle)
+
+            let outputTableTopRowBut = document.createElement('div');
+            outputTableTopRowBut.className = 'outputtoprowbut';
+            outputTableTopRowBut.setAttribute("id", "outputbuttondiv");
+
+            let outputTableButton = document.createElement('button');
+            outputTableButton.setAttribute("onclick", "analysis()");
+            outputTableButton.setAttribute("id", "analysisbutton");
+            outputTableButton.setAttribute("class", "analysisbutton");
+            outputTableButton.innerHTML = "Highlight Matchups";
+            outputTableTopRowBut.append(outputTableButton)
+
+            outputTableTopRow.append(outputTableTopRowH2);
+            outputTableTopRow.append(outputTableTopRowBut);
+            outputDiv.append(outputTableTopRow);
+
+            let outputTable = document.createElement('table');
+            if (chosenButton == "offense" || chosenButton == "defense") {
+                outputTable.className = 'calcresulttableone';
+            }
+            else if (chosenButton == "all") {
+                outputTable.className = 'calcresulttable';
+            }
+            
+
+            for (r = 0; r < 6; r++) {
+                let outputTableRow = document.createElement('tr');
+                for (c = 0; c < 6; c++) {
+                    let outputTableCell = document.createElement('td');
+                    outputTableCell.id = 'cell' + r + c;
+
+                    if (chosenButton == "offense" || chosenButton == "all") {
+                        let outputTableCellSideL = document.createElement('div');
+                        if (chosenButton == "offense") {
+                            outputTableCellSideL.className = "calcone";
+                        }
+                        else {
+                            outputTableCellSideL.className = "calcleft";
+                        }
+
+                        internalDivs(r, c, outputTableCellSideL, "L");
+
+                        outputTableCell.append(outputTableCellSideL);
+                    }
+                    if (chosenButton == "defense" || chosenButton == "all") {
+                        let outputTableCellSideR = document.createElement('div');
+                        if (chosenButton == "defense") {
+                            outputTableCellSideR.className = "calcone";
+                        }
+                        else {
+                            outputTableCellSideR.className = "calcright";
+                        }
+
+                        internalDivs(r, c, outputTableCellSideR, "R");
+
+                        outputTableCell.append(outputTableCellSideR);
+                    }
+
+                    outputTableRow.append(outputTableCell);
+
+                };
+                outputTable.append(outputTableRow);
+
+            };
+
+            function internalDivs(r, c, side, s) {
+                let outputTableCellName = document.createElement('div');
+                outputTableCellName.className = "calcname";
+                outputTableCellName.id = s + "calcname" + r + c;
+                side.append(outputTableCellName);
+
+                let outputTableCellMovebox = document.createElement('div');
+                outputTableCellMovebox.className = "movebox";
+                outputTableCellMovebox.id = s + "movebox" + r + c;
+
+                for (b = 1; b < 5; b++) {
+                    let outputTableCellMove = document.createElement('div');
+                    outputTableCellMove.className = "moves";
+                    outputTableCellMove.id = s + "moves" + r + c;
+                    outputTableCellMovebox.append(outputTableCellMove);
+                    if (b < 4) {
+                        outputTableCellMovebox.append(document.createElement('br'));
+                    }
+                }
+                side.append(outputTableCellMovebox);
+
+                let outputTableCellSpeed = document.createElement('div');
+                outputTableCellSpeed.className = "calcname";
+                side.append(outputTableCellSpeed);
+            }
+
+            outputDiv.append(outputTable);
+
+            // Collect data to run through calculator
+            function fillInputs(obj, s, r) {
+                for (info = 1; info < 5; info++) {
+                    let opt = inputBoxNames[0][info]
+                    obj[opt] = document.querySelector("[id=" + s + opt + r + "]").value
+                };
+                obj.evs = {}
+                obj.boosts = {}
+                for (ev = 0; ev < 6; ev++) {
+                    let e = inputBoxNames[1][ev];
+                    obj.evs[e] = document.querySelector("[id=" + s + e + r + "]").value
+                    obj.boosts[e] = document.querySelector("[id=" + s + e + r + "sel]").value
+                }
+            }
+
+            let fieldoptions = {
+                "weather": document.querySelector("[id=fieldweather]").value,
+                "terrain": document.querySelector("[id=fieldterrain]").value,
+                "attackerSide": {},
+                "defenderSide": {}
+            };
+            for (let r = 0; r < 6; r++) {
+                var rd = r + 1
+                var rowname = document.querySelector("[id=Lname" + rd + "]").value;
+                let rowoptions = {};
+                fillInputs(rowoptions, "L", rd);
+                for (let c = 0; c < 6; c++) {
+                    var cd = c + 1
+                    var colname = document.querySelector("[id=Rname" + cd + "]").value
+                    let coloptions = {};
+                    fillInputs(coloptions, "R", cd);
+                    var battleid = "battle" + r + c
+                    damagelog[battleid] = {}
+                    damagelog[battleid].speed = []
+                    for (let a = 0; a < 2; a++) {
+                        var movedir = "moves" + a
+                        damagelog[battleid][movedir] = []
+                        for (let m = 1; m < 5; m++) {
+                            if (a == 0) {
+                                var asidefield = document.querySelector("[id=fieldteam1side]").value;
+                                if (asidefield != "None") {
+                                    var asidefieldvar = 'is' + asidefield.split(" ").join('');
+                                    console.log(asidefieldvar)
+                                    fieldoptions.attackerSide[asidefieldvar] = true;
+                                }
+                                var dsidefield = document.querySelector("[id=fieldteam2side]").value;
+                                if (dsidefield != "None") {
+                                    var dsidefieldvar = 'is' + dsidefield.split(" ").join('');
+                                    fieldoptions.defenderSide[dsidefieldvar] = true;
+                                }
+                                
+                                var formData = {
+                                    'aname': rowname,
+                                    'aopts': rowoptions,
+                                    'dname': colname,
+                                    'dopts': coloptions,
+                                    'mname': document.querySelector("[id=Lmove" + m + rd + "]").value,
+                                    'field': fieldoptions
+                                };
+                            }
+                            else {
+                                var asidefield = document.querySelector("[id=fieldteam2side]").value;
+                                if (asidefield != "None") {
+                                    var asidefieldvar = 'is' + asidefield.split(" ").join('');
+                                    fieldoptions.attackerSide[asidefieldvar] = true;
+                                }
+                                var dsidefield = document.querySelector("[id=fieldteam1side]").value;
+                                if (dsidefield != "None") {
+                                    var dsidefieldvar = 'is' + dsidefield.split(" ").join('');
+                                    fieldoptions.defenderSide[dsidefieldvar] = true;
+                                }
+
+                                var formData = {
+                                    'aname': colname,
+                                    'aopts': coloptions,
+                                    'dname': rowname,
+                                    'dopts': rowoptions,
+                                    'mname': document.querySelector("[id=Rmove" + m + cd + "]").value,
+                                    'field': fieldoptions
+                                };
+
+                            }
+
+                            if (formData.aname == "" || formData.dname == "" || formData.mname == "") {
+                                outputTable.rows[r].cells[c].children[0].children[1].innerHTML = '';
+                                if (chosenButton == "all") {
+                                    outputTable.rows[r].cells[c].children[1].children[1].innerHTML = '';
+                                }
+                            } else {
+                                $.ajax({
+                                    url: '/',
+                                    type: 'POST',
+                                    data: formData,
+                                    success: function (data) {
+                                        onSuccess(data, outputTable, r, c, a, m);
+                                    },
+                                    error: function () {
+                                        var index = (m - 1) * 2;
+                                        outputTable.rows[r].cells[c].children[a].children[1].children[index].innerHTML = '';
+                                    }
+                                });
+
+                                function onSuccess(data, tab, r, c, a, m) {
+                                    // compute damage
+                                    var lbound = 100 * data.damage[0] / data.defender.originalCurHP;
+                                    var ubound = 100 * data.damage[15] / data.defender.originalCurHP;
+                                    var lb = lbound.toFixed(1);
+                                    var ub = ubound.toFixed(1);
+                                    var damageRa = ''
+                                    if (ub == "NaN") {
+                                        damageRa = '0% - 0%'
+                                    }
+                                    else {
+                                        damageRa = lb + '% - ' + ub + '%';
+                                    }
+
+                                    if (data.move.priority == 1) {
+                                        damageRa = damageRa + "*"
+                                    }
+
+                                    // populate table
+                                    var index = (m - 1) * 2;
+
+                                    if (chosenButton == "offense") {
+                                        if (a == 0) {
+                                            tab.rows[r].cells[c].children[0].children[0].innerHTML = data.attacker.name + " > " + data.defender.name;
+
+                                            tab.rows[r].cells[c].children[0].children[1].children[index].innerHTML = damageRa;
+
+                                            tab.rows[r].cells[c].children[0].children[2].innerHTML = 'Spe: ' + data.attacker.stats.spe + " vs. " + data.defender.stats.spe;
+                                        }
+                                    }
+                                    else if (chosenButton == "defense") {
+                                        if (a == 1) {
+                                            tab.rows[r].cells[c].children[0].children[0].innerHTML = data.attacker.name + " > " + data.defender.name;
+
+                                            tab.rows[r].cells[c].children[0].children[1].children[index].innerHTML = damageRa;
+
+                                            tab.rows[r].cells[c].children[0].children[2].innerHTML = 'Spe: ' + data.attacker.stats.spe + " vs. " + data.defender.stats.spe;
+                                        }
+                                    }
+                                    else if (chosenButton == "all") {
+                                        tab.rows[r].cells[c].children[0].children[0].innerHTML = data.defender.name;
+                                        tab.rows[r].cells[c].children[1].children[0].innerHTML = data.attacker.name;
+
+                                        tab.rows[r].cells[c].children[a].children[1].children[index].innerHTML = damageRa;
+
+                                        tab.rows[r].cells[c].children[0].children[2].innerHTML = 'Spe: ' + data.defender.stats.spe;
+                                        tab.rows[r].cells[c].children[1].children[2].innerHTML = 'Spe: ' + data.attacker.stats.spe;
+                                    }
+
+                                    var battleid = "battle" + r + c
+                                    var movedir = "moves" + a
+                                    damagelog[battleid][movedir].push(damageRa);
+                                    if (a == 0 && m == 1) {
+                                        damagelog[battleid].speed.push(data.attacker.stats.spe, data.defender.stats.spe)
+                                    }
+                                    
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        };
+
+
+    </script>
+
+    <script>
+        let colortagsall = ["OHKO Against", "2HKO Against", "Neutral", "2HKO For", "OHKO For"]
+        let colortagsattack = ["0-25%", "25-50%", "50-75%", "75-100%", "100%+"]
+        let colortagsdefense = ["100%+", "75-100%", "50-75%", "25-50%", "0-25%"]
+        let colortagscolors = ["#d13636", "#ed8181", "#f2f2f2", "#90e97f", "#45a049"]
+        
+        function buildColorLegend(colortags) {
+            const outputTableTopRowBut = document.querySelector("div.outputtoprowbut");
+
+            let outputTableButtonLegend = document.createElement('ul');
+            outputTableButtonLegend.className = 'legend';
+
+            colortags.forEach( function(ct, cnum) {
+                let outputTableButtonListItem = document.createElement('li');
+                outputTableButtonListItem.innerHTML = ct;
+                let outputTableButtonListSpan = document.createElement('span');
+                outputTableButtonListSpan.className = "span" + cnum;
+                outputTableButtonListItem.prepend(outputTableButtonListSpan);
+                outputTableButtonLegend.append(outputTableButtonListItem);
+            })
+
+            outputTableTopRowBut.append(outputTableButtonLegend);
+
+        }
+
+        function calculateResult(r, c, button) {
+            var battleid = "battle" + r + c;
+            var movedamage0;
+            var movedamage1;
+            for (a = 0; a < 2; a++) {
+                var movebox = "moves" + a
+                var moveresults = damagelog[battleid][movebox]
+                var movedamagenum = [];
+                moveresults.forEach(function (move, num) {
+                    var moverange = move.split(" - ");
+                    var movelev1 = moverange[0].split("%")[0]
+                    var movelev2 = moverange[1].split("%")[0]
+                    var moveext1 = Number(movelev1);
+                    var moveext2 = Number(movelev2);
+                    var moveave = (moveext1 + moveext2) / 2;
+                    movedamagenum.push(moveave);
+                })
+                if (a == 0 && movedamagenum.length > 0) {
+                    movedamage0 = Math.max(...movedamagenum)
+                }
+                else if (a == 1 && movedamagenum.length > 0) {
+                    movedamage1 = Math.max(...movedamagenum)
+                }
+            };
+            const outputCell = document.querySelector("#cell" + r + c);
+            if (button == "offense") {
+                var c0 = Math.floor(movedamage0 / 25);
+                if (c0 > 4) {
+                    c0 = 4;
+                }
+                outputCell.children[0].children[1].style.backgroundColor = colortagscolors[c0];
+            }
+            else if (button == "defense") {
+                var c1 = Math.floor(movedamage1 / 25);
+                if (c1 > 4) {
+                    c1 = 4;
+                }
+                var cr1 = 4-c1
+                outputCell.children[0].children[1].style.backgroundColor = colortagscolors[cr1];
+            }
+            else if (button == "all") {
+                var c0 = Math.floor(movedamage0 / 25);
+                if (c0 > 4) {
+                    c0 = 4;
+                }
+                outputCell.children[0].children[1].style.backgroundColor = colortagscolors[c0];
+
+                var c1 = Math.floor(movedamage1 / 25);
+                if (c1 > 4) {
+                    c1 = 4;
+                }
+                var cr1 = 4 - c1
+                outputCell.children[1].children[1].style.backgroundColor = colortagscolors[cr1];
+            }
+        }
+
+        function analysis() {
+            if (chosenButton == "offense") {
+                if (document.getElementById("outputbuttondiv").childNodes.length < 2) {
+                    buildColorLegend(colortagsattack);
+                }
+            }
+            else if (chosenButton == "defense") {
+                if (document.getElementById("outputbuttondiv").childNodes.length < 2) {
+                    buildColorLegend(colortagsdefense);
+                }
+            }
+            else if (chosenButton == "all") {
+                if (document.getElementById("outputbuttondiv").childNodes.length < 2) {
+                    buildColorLegend(colortagsall);
+                }
+            }
+            for (let r = 0; r < 6; r++) {
+                for (let c = 0; c < 6; c++) {
+                    calculateResult(r, c, chosenButton);
+                }
+            }
+
+            
+            
+        }
+
+        
+    </script>
+
+</body>
+</html>

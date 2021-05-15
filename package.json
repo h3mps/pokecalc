@@ -1,0 +1,22 @@
+{
+  "name": "pokecalc",
+  "version": "1.0.0",
+  "description": "Calculate pokemon damage",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pokemon",
+    "calculations"
+  ],
+  "author": "\"Alexander\"",
+  "license": "ISC",
+  "dependencies": {
+    "@smogon/calc": "^0.6.0",
+    "@smogon/sets": "^1.5.2",
+    "express": "^4.17.1",
+    "jquery": "^3.6.0",
+    "serve-favicon": "^2.5.0"
+  }
+}
