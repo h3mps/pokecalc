@@ -16,7 +16,7 @@ app.set('port', process.env.PORT || 3000);
 
 //Route for get requests.
 app.get('/', (request, response) => {
-    response.sendFile(__dirname + '/form2.html');
+    response.sendFile(__dirname + '/index.html');
 });
 
 app.get('/sets', (request, response) => {
@@ -49,6 +49,6 @@ app.post('/', (req, res) => {
     }
 });
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
     console.log('Express server started at port 3000');
 });
