@@ -424,7 +424,7 @@
 
         $(document).ready(function () {
             // set up JSON url
-            let url = 'http://localhost:3000/sets';
+            let url = './sets';
 
             inputRowValues.forEach(function (r, rind) {
                 // create table of pokemon inputs
@@ -657,7 +657,7 @@
 
                 document.querySelector("[id=" + r + "name" + num + "]").value = chosenmon;
 
-                $.getJSON('http://localhost:3000/sets', function (data) {
+                $.getJSON('./sets', function (data) {
                     for (d = 0; d < 3; d++) {
                         var inputBoxLength = inputBoxNames[d].length;
                         for (i = 0; i < inputBoxLength; i++) {
