@@ -5,6 +5,7 @@ const setsou = require("@smogon/sets/gen8ou.json");
 const setsuu = require("@smogon/sets/gen8uu.json");
 const setsru = require("@smogon/sets/gen8ru.json");
 const setsnu = require("@smogon/sets/gen8nu.json");
+const setspu = require("@smogon/sets/gen8pu.json");
 const app = express();
 
 app.use(express.urlencoded());
@@ -24,7 +25,8 @@ app.get('/sets', (request, response) => {
         "ou": setsou,
         "uu": setsuu,
         "ru": setsru,
-        "nu": setsnu
+        "nu": setsnu,
+        "pu": setspu
     }
     response.json(sets)
 });
