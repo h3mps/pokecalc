@@ -273,6 +273,22 @@
                     background-color: #45a049;
                 }
 
+        .importsetsbutton {
+            background-color: #4CAF50;
+            color: white;
+            padding: 4px 4px;
+            border: none;
+            border-radius: 4px;
+            margin: 4px 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: "Verdana";
+            width: 100px;
+        }
+            .importsetsbutton button:hover {
+                background-color: #45a049;
+            }
+
         /* Inner Div Elements */
         .calcone {
             display: block;
@@ -320,11 +336,11 @@
             padding: 1px;
         }
 
-        .outputtoprowh2 {
+        .outputtoprowh2, .teamname {
             float: left;
         }
 
-        .outputtoprowbut {
+        .outputtoprowbut, .teamnameimport {
             float: right;
             text-align: right;
         }
@@ -386,7 +402,7 @@
             </div>
         </div>
         <div class="formwrapper">
-            <form method="POST" action="/">
+            <form id="mainform" method="POST" action="/">
                 <div class="inputtablediv" id="inputtabledivL"></div>
                 <div class="inputfieldwrapperoutside">
                     <div class="inputfieldwrapperinside">
@@ -442,13 +458,35 @@
 
                 inputDiv.innerHTML = '';
 
+                // Team Name Wrapper
+                let inputTeamNameDivWrapper = document.createElement('div');
+                inputTeamNameDivWrapper.className = 'teamnamewrapper';
+
+                // Team Name
                 let inputTeamNameDiv = document.createElement('div');
                 inputTeamNameDiv.className = 'teamname';
 
                 let inputTeamName = document.createElement('h3');
                 inputTeamName.innerHTML = 'Team ' + teamnum;
                 inputTeamNameDiv.append(inputTeamName);
-                inputDiv.append(inputTeamNameDiv);
+                inputTeamNameDivWrapper.append(inputTeamNameDiv);
+
+                // Import Button
+                let inputTeamNameDivImport = document.createElement('div');
+                inputTeamNameDivImport.className = 'teamnameimport';
+
+                let inputTableButton = document.createElement('button');
+                inputTableButton.setAttribute("onclick", "importSets()");
+                inputTableButton.setAttribute("type", "button");
+                inputTableButton.setAttribute("id", r + "importsetsbutton");
+                inputTableButton.setAttribute("class", "importsetsbutton");
+                inputTableButton.innerHTML = "Import Sets";
+                inputTeamNameDivImport.append(inputTableButton)
+
+                inputTeamNameDivWrapper.append(inputTeamNameDivImport);
+
+                // Append to inputDiv
+                inputDiv.append(inputTeamNameDivWrapper);
 
                 let inputTable = document.createElement('table');
                 inputTable.className = 'pokecalc';
@@ -644,6 +682,105 @@
     </script>
 
     <script>
+        function importSets() {
+            // Collect Information
+            var targid = event.target.id;
+            var r = targid.charAt(0);
+
+            var sets = prompt("Import Sets: ");
+            var pokesplitouter = sets.split(" @ ");
+            var splitlen = pokesplitouter.length
+
+            let pokenameouter = pokesplitouter[0]
+
+            // Loop through sets and fill inputs
+            for (l = 1; l < splitlen; l++) {
+                // Item
+                pokesplit = pokesplitouter[l].split("Ability: ");
+                var pokeitem = pokesplit[0].trim();
+
+                // Ability
+                pokesplit = pokesplit[1].split("EVs: ");
+                var pokeability = pokesplit[0].trim();
+
+                // EVs and Nature
+                pokesplit = pokesplit[1].split("Nature");
+                var pokeevsnature = pokesplit[0];
+
+                // EVs
+                var pokeevs = pokeevsnature.split(" \r\n")[0];
+                var pokeevsarray = pokeevs.split(" / ");
+                let pokeevslist = {}
+                pokeevsarray.forEach(e => {
+                    var evsa = e.split(' ');
+                    pokeevslist[evsa[1].toLowerCase()] = parseInt(evsa[0],10);
+                })
+
+                // Nature
+                var pokenature = pokeevsnature.split(" \r\n")[1].trim();
+
+                // Moves
+                var pokemovessplit = pokesplit[1].split("- ");
+                let pokemoves = []
+                for (m = 1; m < 4; m++) {
+                    pokemoves.push(pokemovessplit[m].trim());
+                }
+                pokemoves.push(pokemovessplit[4].split("\r\n\r\n")[0].trim());
+                var chosenmon = pokenameouter;
+                var chosensub = "sub" + l;
+                
+                // JSON to fill
+                let importData = {};
+                importData[chosenmon] = {}; // set chosenmon and chosensub (use loop value to ensure unique)
+                importData[chosenmon][chosensub] = {};
+                importData[chosenmon][chosensub].item = pokeitem;
+                importData[chosenmon][chosensub].ability = pokeability;
+                importData[chosenmon][chosensub].nature = pokenature;
+                importData[chosenmon][chosensub].moves = pokemoves; // array
+                importData[chosenmon][chosensub].evs = pokeevslist
+
+                console.log(importData);
+
+                var chosenmonfix = chosenmon.substring(
+                    chosenmon.indexOf("(") + 1,
+                    chosenmon.indexOf(")")
+                );
+
+                document.querySelector("[id=" + r + "name" + l + "]").value = chosenmonfix;
+
+                // Fill Input Slots From Import
+                // Need r from which box was clicked, Need num to be loop value (maybe loop val + 1)
+                for (d = 0; d < 3; d++) {
+                    var inputBoxLength = inputBoxNames[d].length;
+                    for (i = 0; i < inputBoxLength; i++) {
+                        var ref1 = inputBoxDivs[d];
+                        var ref2 = inputBoxNames[d][i];
+                        if (d == 0) {
+                            if (ref2 in importData[chosenmon][chosensub]) {
+                                document.querySelector("[id=" + r + ref2 + l + "]").value = importData[chosenmon][chosensub][ref2];
+                            }
+                        }
+                        else if (d == 1) {
+                            if (ref2 in importData[chosenmon][chosensub][ref1]) {
+                                document.querySelector("[id=" + r + ref2 + l + "]").value = importData[chosenmon][chosensub][ref1][ref2];
+                            }
+                            else {
+                                document.querySelector("[id=" + r + ref2 + l + "]").value = 0;
+                            }
+                        }
+                        else if (d == 2) {
+                            document.querySelector("[id=" + r + ref2 + l + "]").value = importData[chosenmon][chosensub][ref1][i];
+                        };
+                    }
+                }
+                pokenameouter = pokemovessplit[4].split("\r\n\r\n")[1];
+
+            }
+
+        }
+    </script>
+
+    <script>
         // On click of an input
         $('.inputtablediv').on('input', '.setinput', function (event) {
             var targid = event.target.id;
@@ -707,7 +844,7 @@
         var chosenButton = '';
         var damagelog = {};
         // On submit
-        $('form').on('submit', makeRequest);
+        $('#mainform').on('submit', makeRequest);
         function makeRequest(e) {
             e.preventDefault();
             chosenButton = $(document.activeElement).val();
