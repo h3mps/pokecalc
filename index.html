@@ -701,7 +701,12 @@
 
                 // Ability
                 pokesplit = pokesplit[1].split("EVs: ");
-                var pokeability = pokesplit[0].trim();
+                if (pokesplit[0].includes("Shiny:") === true) {
+                    pokeability = pokesplit[0].split("Shiny:")[0].trim();
+                }
+                else {
+                    var pokeability = pokesplit[0].trim();
+                }
 
                 // EVs and Nature
                 pokesplit = pokesplit[1].split("Nature");
@@ -721,13 +726,29 @@
 
                 // Moves
                 var pokemovessplit = pokesplit[1].split("- ");
+                var movesplitlen = pokemovessplit.length
                 let pokemoves = []
-                for (m = 1; m < 4; m++) {
+                for (m = 1; m < movesplitlen - 1; m++) {
                     pokemoves.push(pokemovessplit[m].trim());
                 }
-                pokemoves.push(pokemovessplit[4].split("\r\n\r\n")[0].trim());
-                var chosenmon = pokenameouter;
+                pokemoves.push(pokemovessplit[movesplitlen - 1].split("\r\n\r\n")[0].trim());
+
+                console.log(pokemovessplit)
+                console.log(pokemovessplit[4])
+                console.log(pokemoves)
+
+                // Name
+                if (l < splitlen - 1) {
+                    var chosenmon = pokenameouter;
+                    pokenameouter = pokemovessplit[movesplitlen - 1].split("\r\n\r\n")[1];
+                }
+                else if (l == splitlen - 1) {
+                    var chosenmon = pokenameouter;
+                }
                 var chosensub = "sub" + l;
+
+                console.log(chosenmon);
+                console.log(pokenameouter);
                 
                 // JSON to fill
                 let importData = {};
@@ -739,10 +760,15 @@
                 importData[chosenmon][chosensub].moves = pokemoves; // array
                 importData[chosenmon][chosensub].evs = pokeevslist
 
-                var chosenmonfix = chosenmon.substring(
-                    chosenmon.indexOf("(") + 1,
-                    chosenmon.indexOf(")")
-                );
+                if (chosenmon.includes("(") === true) {
+                    var chosenmonfix = chosenmon.substring(
+                        chosenmon.indexOf("(") + 1,
+                        chosenmon.indexOf(")")
+                    );
+                }
+                else {
+                    var chosenmonfix = chosenmon;
+                }
 
                 document.querySelector("[id=" + r + "name" + l + "]").value = chosenmonfix;
 
@@ -771,7 +797,6 @@
                         };
                     }
                 }
-                pokenameouter = pokemovessplit[4].split("\r\n\r\n")[1];
 
             }
 
