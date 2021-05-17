@@ -739,8 +739,6 @@
                 importData[chosenmon][chosensub].moves = pokemoves; // array
                 importData[chosenmon][chosensub].evs = pokeevslist
 
-                console.log(importData);
-
                 var chosenmonfix = chosenmon.substring(
                     chosenmon.indexOf("(") + 1,
                     chosenmon.indexOf(")")
@@ -1053,8 +1051,6 @@
                                     outputTable.rows[r].cells[c].children[1].children[1].innerHTML = '';
                                 }
                             } else {
-                                console.log(a)
-                                console.log(fieldoptions)
                                 $.ajax({
                                     url: '/',
                                     type: 'POST',
