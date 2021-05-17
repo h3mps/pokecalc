@@ -687,7 +687,7 @@
             var targid = event.target.id;
             var r = targid.charAt(0);
 
-            var sets = prompt("Import Sets: ");
+            var sets = prompt("Import Sets (paste from Showdown): ");
             var pokesplitouter = sets.split(" @ ");
             var splitlen = pokesplitouter.length
 
@@ -981,12 +981,6 @@
                 }
             }
 
-            let fieldoptions = {
-                "weather": document.querySelector("[id=fieldweather]").value,
-                "terrain": document.querySelector("[id=fieldterrain]").value,
-                "attackerSide": {},
-                "defenderSide": {}
-            };
             for (let r = 0; r < 6; r++) {
                 var rd = r + 1
                 var rowname = document.querySelector("[id=Lname" + rd + "]").value;
@@ -1003,12 +997,17 @@
                     for (let a = 0; a < 2; a++) {
                         var movedir = "moves" + a
                         damagelog[battleid][movedir] = []
+                        let fieldoptions = {
+                            "weather": document.querySelector("[id=fieldweather]").value,
+                            "terrain": document.querySelector("[id=fieldterrain]").value,
+                            "attackerSide": {},
+                            "defenderSide": {}
+                        };
                         for (let m = 1; m < 5; m++) {
                             if (a == 0) {
                                 var asidefield = document.querySelector("[id=fieldteam1side]").value;
                                 if (asidefield != "None") {
                                     var asidefieldvar = 'is' + asidefield.split(" ").join('');
-                                    console.log(asidefieldvar)
                                     fieldoptions.attackerSide[asidefieldvar] = true;
                                 }
                                 var dsidefield = document.querySelector("[id=fieldteam2side]").value;
@@ -1048,13 +1047,14 @@
                                 };
 
                             }
-
                             if (formData.aname == "" || formData.dname == "" || formData.mname == "") {
                                 outputTable.rows[r].cells[c].children[0].children[1].innerHTML = '';
                                 if (chosenButton == "all") {
                                     outputTable.rows[r].cells[c].children[1].children[1].innerHTML = '';
                                 }
                             } else {
+                                console.log(a)
+                                console.log(fieldoptions)
                                 $.ajax({
                                     url: '/',
                                     type: 'POST',
