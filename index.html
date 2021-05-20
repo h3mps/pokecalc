@@ -765,6 +765,11 @@
                         chosenmon.indexOf("(") + 1,
                         chosenmon.indexOf(")")
                     );
+                    if (chosenmonfix === "M" || chosenmonfix === "F") {
+                        chosenmonfix = chosenmon.substring(0,
+                            chosenmon.indexOf("("),
+                        );
+                    }
                 }
                 else {
                     var chosenmonfix = chosenmon;
