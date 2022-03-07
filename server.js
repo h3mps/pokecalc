@@ -1,6 +1,7 @@
 // JavaScript source code
 const express = require('express');
 const calc = require("@smogon/calc");
+const setsnd = require("@smogon/sets/gen8nationaldex.json");
 const setsou = require("@smogon/sets/gen8ou.json");
 const setsuu = require("@smogon/sets/gen8uu.json");
 const setsru = require("@smogon/sets/gen8ru.json");
@@ -22,6 +23,7 @@ app.get('/', (request, response) => {
 
 app.get('/sets', (request, response) => {
     const sets = {
+        "nd": setsnd,
         "ou": setsou,
         "uu": setsuu,
         "ru": setsru,
